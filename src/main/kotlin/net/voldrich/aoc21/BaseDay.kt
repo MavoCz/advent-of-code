@@ -13,6 +13,7 @@ abstract class BaseDay {
     }
 
     abstract fun task1()
+
     abstract fun task2()
 
     fun getResourceAsText(path: String): String {
@@ -21,6 +22,8 @@ abstract class BaseDay {
     }
 
     fun getResourceAsLines(path: String): List<String> {
-        return getResourceAsText(path).split("\n");
+        return getResourceAsText(path)
+            .split("\n")
+            .map { it.trim() } // needed for windows removal of \r
     }
 }

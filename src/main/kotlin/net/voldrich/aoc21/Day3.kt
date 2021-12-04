@@ -14,7 +14,7 @@ fun main() {
 class Day3 : BaseDay() {
 
     override fun task1() {
-        val bitCount = inputLines.get(0).length;
+        val bitCount = inputLines[0].length;
         val oneCounts = IntArray(bitCount)
         inputLines.forEach {
             for (i in 0 until bitCount) {
@@ -41,6 +41,8 @@ class Day3 : BaseDay() {
         println("gamma $gammaDecimal, epsilon $epsilonDecimal, multiplied ${gammaDecimal * epsilonDecimal}")
     }
 
+
+
     override fun task2() {
         val oxygen = calculate(inputLines, fun(oneCount, size): Char {
             if (size == 2) return '1'
@@ -56,15 +58,15 @@ class Day3 : BaseDay() {
     }
 
     private fun calculate(lines: List<String>, logic: (Int, Int) -> Char): String {
-        val bitCount = lines.get(0).length;
+        val bitCount = lines[0].length;
 
         var filteredLines = lines
         for (i in 0 until bitCount) {
             val oneCount = calculateOneCount(i, filteredLines)
             val filteredNum = logic(oneCount, filteredLines.size)
-            filteredLines = filteredLines.filter { it.get(i) == filteredNum }.toList()
+            filteredLines = filteredLines.filter { it[i] == filteredNum }.toList()
             if (filteredLines.size == 1) {
-                return filteredLines.get(0)
+                return filteredLines[0]
             }
         }
 
@@ -72,6 +74,6 @@ class Day3 : BaseDay() {
     }
 
     private fun calculateOneCount(index: Int, lines: List<String>) : Int {
-        return lines.map { it.get(index) }.map { if (it == '1') 1 else 0 }.count { it > 0 }
+        return lines.map { it[index] }.count { it == '1' }
     }
 }

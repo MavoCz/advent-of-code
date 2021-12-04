@@ -1,4 +1,5 @@
 package net.voldrich.aoc21
+
 // link to task
 fun main() {
     DayN().run()
