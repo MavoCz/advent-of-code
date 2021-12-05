@@ -1,5 +1,6 @@
 package net.voldrich.aoc21
 
+import java.util.function.Predicate
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -14,97 +15,91 @@ fun main() {
 private class Day5 : BaseDay() {
 
     override fun task1() {
-        val dangerPointCount = calculateDangerPoints(listOf(
-            HorizontalLineRenderer(),
-            VerticalLineRenderer()
-        ))
+        val dangerPointCount = calculateDangerPoints { ventLine ->
+            ventLine is HorizontalLine || ventLine is VerticalLine
+        }
         println("result $dangerPointCount")
     }
 
     override fun task2() {
-        val dangerPointCount = calculateDangerPoints(listOf(
-            HorizontalLineRenderer(),
-            VerticalLineRenderer(),
-            DiagonalLineRenderer()
-        ))
+        val dangerPointCount = calculateDangerPoints { true } // calculate all lines
         println("result $dangerPointCount")
     }
 
-    interface LineRenderer {
-        fun renderLine(line: VentLine, grid: Array<IntArray>)
-    }
-
-    class HorizontalLineRenderer : LineRenderer {
-        override fun renderLine(line: VentLine, grid: Array<IntArray>) {
-            if (line.start.x == line.end.x) {
-                for (y in min(line.start.y, line.end.y) .. max(line.start.y, line.end.y)) {
-                    grid[y][line.start.x] += 1
-                }
-            }
-        }
-    }
-
-    class VerticalLineRenderer : LineRenderer {
-        override fun renderLine(line: VentLine, grid: Array<IntArray>) {
-            if (line.start.y == line.end.y) {
-                for (x in min(line.start.x, line.end.x) .. max(line.start.x, line.end.x)) {
-                    grid[line.start.y][x] += 1
-                }
-            }
-        }
-    }
-
-    class DiagonalLineRenderer : LineRenderer {
-        override fun renderLine(line: VentLine, grid: Array<IntArray>) {
-            val dimensionsX = abs(line.start.x - line.end.x)
-            val dimensionsY = abs(line.start.y - line.end.y)
-            if (dimensionsX == dimensionsY) {
-                var y = line.start.y
-                val yIncrement = if (line.start.y < line.end.y) 1 else -1
-                var x = line.start.x
-                val xIncrement = if (line.start.x < line.end.x) 1 else -1
-                grid[y][x] += 1
-                for (i in 0 until dimensionsX) {
-                    y += yIncrement
-                    x += xIncrement
-                    grid[y][x] += 1
-                }
-            }
-        }
-    }
-
-    fun calculateDangerPoints(lineParsers : List<LineRenderer>) : Int {
-        val lines = inputLines.map { parseLine(it) }.toList()
+    fun calculateDangerPoints(lineFilter: Predicate<VentLine>): Int {
+        val lines = inputLines.map { parseLine(it) }.filterNotNull().filter { lineFilter.test(it) }.toList()
 
         val maxx = lines.maxOf { max(it.start.x, it.end.x) }
         val maxy = lines.maxOf { max(it.start.y, it.end.y) }
 
         val grid = Array(maxy + 1) { IntArray(maxx + 1) }
-        lines.forEach { line ->
-            lineParsers.forEach { it.renderLine(line, grid) }
-        }
-
-        return grid.flatMap { it.filter { it > 1 } }.size
+        lines.forEach { it.render(grid) }
+        return grid.flatMap { row -> row.filter { it > 1 } }.size
     }
 
     val lineRegex = Regex("([0-9]+),([0-9]+) -> ([0-9]+),([0-9]+)")
 
-    fun parseLine(line : String) : VentLine {
+    fun parseLine(line: String): VentLine? {
         val matches = lineRegex.find(line) ?: throw Exception("Failed to parse vent line $line")
 
-        return VentLine(
-            Point(
-                matches.groups[1]?.value?.toInt() ?: throw Exception("Failed to parse vent line $line"),
-                matches.groups[2]?.value?.toInt() ?: throw Exception("Failed to parse vent line $line")),
-            Point(
-                matches.groups[3]?.value?.toInt() ?: throw Exception("Failed to parse vent line $line"),
-                matches.groups[4]?.value?.toInt() ?: throw Exception("Failed to parse vent line $line")),
+        val start = Point(
+            matches.groups[1]?.value?.toInt() ?: throw Exception("Failed to parse vent line $line"),
+            matches.groups[2]?.value?.toInt() ?: throw Exception("Failed to parse vent line $line")
         )
+        val end = Point(
+            matches.groups[3]?.value?.toInt() ?: throw Exception("Failed to parse vent line $line"),
+            matches.groups[4]?.value?.toInt() ?: throw Exception("Failed to parse vent line $line")
+        )
+
+        if (start.x == end.x) {
+            return VerticalLine(start, end)
+        } else if (start.y == end.y) {
+            return HorizontalLine(start, end)
+        } else if (abs(start.x - end.x) == abs(start.y - end.y)) {
+            return DiagonalLine(start, end)
+        }
+
+        return null
     }
 
     data class Point(val x: Int, val y: Int)
 
-    data class VentLine(val start: Point, val end: Point)
+    abstract class VentLine(val start: Point, val end: Point) {
+        abstract fun render(grid: Array<IntArray>)
+    }
+
+    class HorizontalLine(start: Point, end: Point) : VentLine(start, end) {
+        override fun render(grid: Array<IntArray>) {
+            for (x in min(start.x, end.x) .. max(start.x, end.x)) {
+                grid[start.y][x] += 1
+            }
+        }
+    }
+
+    class VerticalLine(start: Point, end: Point) : VentLine(start, end) {
+        override fun render(grid: Array<IntArray>) {
+            for (y in min(start.y, end.y) .. max(start.y, end.y)) {
+                grid[y][start.x] += 1
+            }
+        }
+    }
+
+    class DiagonalLine(start: Point, end: Point) : VentLine(start, end) {
+        override fun render(grid: Array<IntArray>) {
+            val dimensionsX = abs(start.x - end.x)
+
+            var y = start.y
+            val yIncrement = if (start.y < end.y) 1 else -1
+            var x = start.x
+            val xIncrement = if (start.x < end.x) 1 else -1
+            grid[y][x] += 1
+            for (i in 0 until dimensionsX) {
+                y += yIncrement
+                x += xIncrement
+                grid[y][x] += 1
+            }
+        }
+    }
 }
 
 
