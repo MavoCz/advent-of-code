@@ -26,7 +26,7 @@ private class Day4 : BaseDay() {
             if (winningBoardSet.add(bingoBoard)) {
                 winningBoardList.add(Pair(bingoBoard, number))
             }
-            winningBoardSet.size == 100
+            winningBoardSet.size == 100 // end if all boards finished
         }
 
         val last = winningBoardList.last()
@@ -34,12 +34,14 @@ private class Day4 : BaseDay() {
         println("Last board with bingo!! sum $sum, number ${last.second}, multiplied ${sum * last.second}")
     }
 
+    // provide function which is invoked when bingo is detected.
+    // Return true if you want to quit, false to continue with next number
     fun analyzeBoards(bingoHandler : (BingoBoard, number: Int) -> Boolean) {
         val draftedNumbers = inputLines[0].split(",").map { it.toInt() }
         val boards = readBoards()
         println("Number of boards ${boards.size}, number of drafted numbers ${draftedNumbers.size}")
 
-        // build index mapping drafted number to board and its positin
+        // build index mapping drafted number to board and its position
         val numberIndex = buildNumberIndex(boards);
 
         draftedNumbers.forEach { number ->
