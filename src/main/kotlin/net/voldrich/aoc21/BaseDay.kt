@@ -3,8 +3,12 @@ package net.voldrich.aoc21
 abstract class BaseDay {
     protected val inputLines : List<String>
 
-    init {
+    constructor() {
         inputLines = getResourceAsLines("/${this.javaClass.simpleName.lowercase()}-input.txt")
+    }
+
+    constructor(lines: List<String>) {
+        inputLines = lines
     }
 
     fun run() {
