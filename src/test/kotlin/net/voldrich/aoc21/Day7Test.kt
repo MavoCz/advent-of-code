@@ -7,7 +7,7 @@ internal class Day7Test {
     @Test
     fun testExample() {
         val day = Day7()
-        day.input = TestInput(listOf("16,1,2,0,4,2,7,1,2,14"))
+        day.input = TestInput("16,1,2,0,4,2,7,1,2,14")
         assertEquals(37, day.task1())
         assertEquals(168, day.task2())
     }

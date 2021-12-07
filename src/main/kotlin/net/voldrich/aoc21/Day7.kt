@@ -22,20 +22,7 @@ class Day7 : BaseDay() {
 
     private fun minimizeFuel(fuelFnc: (Int, Int) -> Int): Int {
         val horizontalPositions = input.getFirstLineAsIntList()
-
-        var min = Int.MAX_VALUE
-        var max = Int.MIN_VALUE
-        var sum = 0
-        horizontalPositions.forEach {
-            if (it < min) min = it
-            if (it > max) max = it
-            sum += it
-        }
-
-        val avg = sum/horizontalPositions.size
-
-        println("min $min, max $max, sum $sum, avg $avg")
-
+        val (min, max) = horizontalPositions.minMax { it }
         return (min..max).minOf { pos -> horizontalPositions.sumOf { value -> fuelFnc.invoke(value, pos) } }
     }
 
