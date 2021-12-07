@@ -37,7 +37,7 @@ private class Day4 : BaseDay() {
     // provide function which is invoked when bingo is detected.
     // Return true if you want to quit, false to continue with next number
     fun analyzeBoards(bingoHandler : (BingoBoard, number: Int) -> Boolean) {
-        val draftedNumbers = inputLines[0].split(",").map { it.toInt() }
+        val draftedNumbers = input.getFirstLineAsIntList()
         val boards = readBoards()
         println("Number of boards ${boards.size}, number of drafted numbers ${draftedNumbers.size}")
 
@@ -73,7 +73,7 @@ private class Day4 : BaseDay() {
         var index = 2;
 
         val boards = ArrayList<BingoBoard>()
-        while (index < inputLines.size) {
+        while (index < input.lines().size) {
             boards.add(BingoBoard(arrayOf(
                 readRow(index++),
                 readRow(index++),
@@ -88,7 +88,7 @@ private class Day4 : BaseDay() {
     }
 
     fun readRow(index: Int): IntArray {
-        val line = inputLines[index];
+        val line = input.lines()[index];
         if (line.isBlank()) {
             throw Exception("Line $index is empty")
         }

@@ -8,7 +8,8 @@ internal class Day6Test {
 
     @Test
     fun procreateFish() {
-        val day = Day6(listOf("3,4,3,1,2"))
+        val day = Day6()
+        day.input = TestInput(listOf("3,4,3,1,2"))
 
         val result = day.procreateFish(18)
 

@@ -7,7 +7,7 @@ fun main() {
 
 class Day2 : BaseDay() {
 
-    override fun task1() {
+    override fun task1() : Int {
         var depth = 0;
         var forward = 0;
         parseInstructions().forEach {
@@ -19,9 +19,10 @@ class Day2 : BaseDay() {
         }
 
         println("forward ${forward}, depth $depth, multiplied ${forward * depth}")
+        return forward * depth
     }
 
-    override fun task2() {
+    override fun task2() : Int {
         var aim = 0;
         var depth = 0;
         var forward = 0;
@@ -37,14 +38,15 @@ class Day2 : BaseDay() {
         }
 
         println("forward ${forward}, depth $depth, multiplied ${forward * depth}")
+        return forward * depth
     }
 
     data class Instruction (val instruction: String, val value: Int)
 
     private fun parseInstructions(): List<Instruction> {
         val regex = Regex("([a-z]+) ([0-9]+)")
-        return inputLines
-            .map { it.lowercase().trim() }
+        return input.lines()
+            .map { it.lowercase() }
             .map { parseInstruction(it, regex) }
             .toList()
     }

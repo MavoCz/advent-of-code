@@ -7,15 +7,11 @@ fun main() {
 
 class Day1 : BaseDay() {
 
-    val elevations: IntArray
+    private val elevations: IntArray = input.lines()
+        .map { it.toInt() }
+        .toIntArray()
 
-    init {
-        this.elevations = inputLines
-            .map { it.toInt() }
-            .toIntArray()
-    }
-
-    override fun task1() {
+    override fun task1() : Int {
         var incrementCount = 0
 
         for (i in 1 until elevations.size) {
@@ -24,10 +20,10 @@ class Day1 : BaseDay() {
             }
         }
 
-        println("Increments: $incrementCount")
+        return incrementCount
     }
 
-    override fun task2() {
+    override fun task2() : Int {
         var incrementCount = 0
         var lastAggregatedElevation = getAggregate(elevations,0)
         for (i in 1 until elevations.size - 2) {
@@ -39,7 +35,7 @@ class Day1 : BaseDay() {
             lastAggregatedElevation = elev
         }
 
-        println("Increments: $incrementCount")
+        return incrementCount
     }
 
     private fun getAggregate(elevations: IntArray, i: Int) = elevations[i] + elevations[i+1] + elevations[i+2]

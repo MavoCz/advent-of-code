@@ -1,6 +1,5 @@
 package net.voldrich.aoc21
 
-import java.util.function.Predicate
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -14,26 +13,25 @@ fun main() {
 
 private class Day5 : BaseDay() {
 
-    override fun task1() {
-        val dangerPointCount = calculateDangerPoints { ventLine ->
+    override fun task1() : Int {
+        return calculateDangerPoints { ventLine ->
             ventLine is HorizontalLine || ventLine is VerticalLine
         }
-        println("result $dangerPointCount")
     }
 
-    override fun task2() {
-        val dangerPointCount = calculateDangerPoints { true } // calculate all lines
-        println("result $dangerPointCount")
+    override fun task2() : Int {
+        return calculateDangerPoints { true } // calculate all lines
     }
 
-    fun calculateDangerPoints(lineFilter: Predicate<VentLine>): Int {
-        val lines = inputLines.map { parseLine(it) }.filterNotNull().filter { lineFilter.test(it) }.toList()
+    fun calculateDangerPoints(lineFilter: (VentLine) -> Boolean): Int {
+        val lines = input.lines().mapNotNull(this::parseLine).filter(lineFilter).toList()
 
         val maxx = lines.maxOf { max(it.start.x, it.end.x) }
         val maxy = lines.maxOf { max(it.start.y, it.end.y) }
 
         val grid = Array(maxy + 1) { IntArray(maxx + 1) }
         lines.forEach { it.render(grid) }
+
         return grid.flatMap { row -> row.filter { it > 1 } }.size
     }
 
@@ -42,14 +40,10 @@ private class Day5 : BaseDay() {
     fun parseLine(line: String): VentLine? {
         val matches = lineRegex.find(line) ?: throw Exception("Failed to parse vent line $line")
 
-        val start = Point(
-            matches.groups[1]?.value?.toInt() ?: throw Exception("Failed to parse vent line $line"),
-            matches.groups[2]?.value?.toInt() ?: throw Exception("Failed to parse vent line $line")
-        )
-        val end = Point(
-            matches.groups[3]?.value?.toInt() ?: throw Exception("Failed to parse vent line $line"),
-            matches.groups[4]?.value?.toInt() ?: throw Exception("Failed to parse vent line $line")
-        )
+        fun getIntResult(mr: MatchGroup?) = mr?.value?.toInt() ?: throw Exception("Failed to parse vent line $line")
+
+        val start = Point(getIntResult(matches.groups[1]), getIntResult(matches.groups[2]))
+        val end = Point(getIntResult(matches.groups[3]), getIntResult(matches.groups[4]))
 
         if (start.x == end.x) {
             return VerticalLine(start, end)

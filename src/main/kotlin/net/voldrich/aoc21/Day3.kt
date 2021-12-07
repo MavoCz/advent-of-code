@@ -13,10 +13,10 @@ fun main() {
 
 class Day3 : BaseDay() {
 
-    override fun task1() {
-        val bitCount = inputLines[0].length;
+    override fun task1() : Int {
+        val bitCount = input.lines()[0].length;
         val oneCounts = IntArray(bitCount)
-        inputLines.forEach {
+        input.lines().forEach {
             for (i in 0 until bitCount) {
                 if (it[i] == '1') {
                     oneCounts[i] += 1;
@@ -27,7 +27,7 @@ class Day3 : BaseDay() {
         val gamma = StringBuilder()
         val epsilon = StringBuilder()
         for (i in 0 until bitCount) {
-            if (oneCounts[i] > inputLines.size / 2) {
+            if (oneCounts[i] > input.lines().size / 2) {
                 gamma.append("0")
                 epsilon.append("1")
             } else {
@@ -38,23 +38,21 @@ class Day3 : BaseDay() {
 
         val gammaDecimal = gamma.toString().toInt(2)
         val epsilonDecimal = epsilon.toString().toInt(2)
-        println("gamma $gammaDecimal, epsilon $epsilonDecimal, multiplied ${gammaDecimal * epsilonDecimal}")
+        return gammaDecimal * epsilonDecimal
     }
 
-
-
-    override fun task2() {
-        val oxygen = calculate(inputLines, fun(oneCount, size): Char {
+    override fun task2() : Int {
+        val oxygen = calculate(input.lines(), fun(oneCount, size): Char {
             if (size == 2) return '1'
             return if (oneCount >= size - oneCount) '1' else '0'
         })
-        val co2 = calculate(inputLines, fun(oneCount, size): Char {
+        val co2 = calculate(input.lines(), fun(oneCount, size): Char {
             if (size == 2) return '0'
             return if (oneCount >= size - oneCount) '0' else '1'
         })
         println ("oxygen: $oxygen, decimal: ${oxygen.toInt(2)}")
         println ("co2: $co2, decimal: ${co2.toInt(2)}")
-        println ("multiply: ${oxygen.toInt(2) * co2.toInt(2)}")
+        return oxygen.toInt(2) * co2.toInt(2)
     }
 
     private fun calculate(lines: List<String>, logic: (Int, Int) -> Char): String {

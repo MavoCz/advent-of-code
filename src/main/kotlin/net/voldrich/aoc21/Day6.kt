@@ -7,24 +7,18 @@ fun main() {
     Day6().run()
 }
 
-class Day6 : BaseDay {
+class Day6 : BaseDay() {
 
-    constructor() : super()
-
-    constructor(lines: List<String>) : super(lines)
-
-    override fun task1() {
-        val result = procreateFish(80);
-        println("fish count: $result")
+    override fun task1() : Any {
+        return procreateFish(80)
     }
 
-    override fun task2() {
-        val result = procreateFish(256);
-        println("fish count: $result")
+    override fun task2() : Any {
+        return procreateFish(256)
     }
 
     fun procreateFish(dayCount : Int) : BigInteger {
-        val fishList = inputLines[0].split(",").map { it.toInt() }.toList()
+        val fishList = input.lines()[0].split(",").map { it.toInt() }.toList()
 
         val dayIndex = (0..8).map { BigInteger.ZERO }.toMutableList()
 
@@ -43,6 +37,5 @@ class Day6 : BaseDay {
 
         return dayIndex.fold(BigInteger.ZERO, BigInteger::add)
     }
-
 
 }
