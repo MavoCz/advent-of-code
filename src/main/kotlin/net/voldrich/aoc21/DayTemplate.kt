@@ -5,7 +5,7 @@ fun main() {
     DayN().run()
 }
 
-private class DayN : BaseDay() {
+class DayN : BaseDay() {
     override fun task1() : Int {
         input.lines().forEach { println(it) }
         return input.lines().count()

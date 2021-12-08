@@ -18,7 +18,7 @@ class Day6 : BaseDay() {
     }
 
     fun procreateFish(dayCount : Int) : BigInteger {
-        val fishList = input.lines()[0].split(",").map { it.toInt() }.toList()
+        val fishList = input.getFirstLineAsIntList()
 
         val dayIndex = (0..8).map { BigInteger.ZERO }.toMutableList()
 
