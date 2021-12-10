@@ -11,7 +11,7 @@ interface InputLoader {
 class TestInput(private val parsedLines: List<String>) : InputLoader {
 
     constructor(line: String, isMultiline: Boolean = false)
-            : this(if (isMultiline) line.trim().split("\n") else listOf(line.trim()))
+            : this(if (isMultiline) line.trim().split("\n").map { it.trim() } else listOf(line.trim()))
 
     override fun lines(): List<String> = parsedLines
 }
