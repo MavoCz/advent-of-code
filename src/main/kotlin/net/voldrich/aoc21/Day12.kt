@@ -39,7 +39,7 @@ class Day12 : BaseDay() {
 
         fun getUniquePaths(): List<CavePath> {
             val startNode = nodeMap["start"]!!// ?: Exception("Start node not found")
-            return startNode.nextNodes.flatMap { findPath(it, CavePath(startNode)) }.toList()
+            return startNode.nextNodes.flatMap { findPath(it, CavePath(startNode)) }
         }
 
         private fun findPath(node: CaveNode, nodePath: CavePath) : List<CavePath> {
