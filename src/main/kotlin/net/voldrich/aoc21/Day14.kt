@@ -29,14 +29,9 @@ class Day14 : BaseDay() {
         private val polymerCounts = HashMap<String, Long>()
         private val pairInsertions = HashMap<String, Pair<String, String>>()
 
-        private fun addPolymer(polymer: String, count: Long) {
-            val value = polymerCounts.computeIfAbsent(polymer) { _ -> 0L }
-            polymerCounts[polymer] = value + count
-        }
-
         init {
             for (i in (1 until seed.length)) {
-                addPolymer(seed.substring(i-1, i+1), 1)
+                addPolymerCount(seed.substring(i-1, i+1), 1)
             }
             val regex = Regex("([A-Z]+) -> ([A-Z])")
             for ( i in 2 until input.lines().size) {
@@ -46,8 +41,10 @@ class Day14 : BaseDay() {
 
                 pairInsertions[key] = Pair(key.substring(0, 1) + middle, middle + key.substring(1, 2))
             }
-            println(polymerCounts)
-            println(pairInsertions)
+        }
+
+        private fun addPolymerCount(polymer: String, count: Long) {
+            polymerCounts.compute(polymer) { _, value -> (value ?: 0L) + count }
         }
 
         fun multiply() {
@@ -56,24 +53,21 @@ class Day14 : BaseDay() {
             val changes = pairInsertions.flatMap { (polymer, pair) ->
                 if (polymerCounts.containsKey(polymer)) {
                     val count = polymerCounts[polymer]!!
-                    listOf(Pair(pair.first, count), Pair(pair.second, count), Pair(polymer, -count))
+                    listOf(Pair(pair.first, count),
+                        Pair(pair.second, count),
+                        Pair(polymer, -count))
                 } else {
                     listOf()
                 }
             }
 
-            changes.forEach { (polymer, count) ->
-                addPolymer(polymer, count)
-            }
+            changes.forEach { (polymer, count) -> addPolymerCount(polymer, count) }
         }
 
         fun getCharCount() : Map<Char, Long> {
             val countMap = HashMap<Char, Long>()
-            polymerCounts.entries.forEach{ (key, value) ->
-                key.toCharArray().forEach { char ->
-                    val oldValue = countMap.computeIfAbsent(char) { _ -> 0L }
-                    countMap[char] = oldValue + value
-                }
+            polymerCounts.entries.forEach { (key, value) ->
+                key.toCharArray().forEach { char -> countMap.compute(char) { _, charValue -> (charValue ?: 0L) + value } }
             }
 
             // Each character is represented twice in neighbour elements
