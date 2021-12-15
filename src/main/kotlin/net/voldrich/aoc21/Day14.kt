@@ -8,24 +8,20 @@ fun main() {
 class Day14 : BaseDay() {
     override fun task1() : Long {
         val polymer = Polymer()
-
         for (i in (1 .. 10)) polymer.multiply()
-        val charCount = polymer.getCharCount()
-        val (min, max) = charCount.values.minMax { it }
+        val (min, max) = polymer.getCharCount().values.minMax { it }
         return max - min
     }
 
     override fun task2() : Long {
         val polymer = Polymer()
-
         for (i in (1 .. 40)) polymer.multiply()
-        val charCount = polymer.getCharCount()
-        val (min, max) = charCount.values.minMax { it }
+        val (min, max) = polymer.getCharCount().values.minMax { it }
         return max - min
     }
 
     inner class Polymer {
-        private val seed: String = input.lines()[0]
+        private val seed = input.lines()[0]
         private val polymerCounts = HashMap<String, Long>()
         private val pairInsertions = HashMap<String, Pair<String, String>>()
 
