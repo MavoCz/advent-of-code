@@ -29,4 +29,11 @@ internal class Day15Test {
         assertEquals(429, day.task1())
         assertEquals(2844, day.task2())
     }
+
+    @Test
+    fun performanceTest() {
+        val day = Day15()
+
+        day.performanceTest(10)
+    }
 }

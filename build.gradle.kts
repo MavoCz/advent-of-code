@@ -16,6 +16,7 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation("com.github.kittinunf.fuel:fuel:2.3.1")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
+    implementation("org.jheaps:jheaps:0.14")
 }
 
 tasks.test {
