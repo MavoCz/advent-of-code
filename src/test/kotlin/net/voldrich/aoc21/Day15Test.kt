@@ -34,6 +34,6 @@ internal class Day15Test {
     fun performanceTest() {
         val day = Day15()
 
-        day.performanceTest(10)
+        day.performanceTest(100)
     }
 }

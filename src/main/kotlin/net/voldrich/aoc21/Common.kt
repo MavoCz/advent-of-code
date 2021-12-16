@@ -54,6 +54,20 @@ abstract class BaseDay {
 
 }
 
+fun String.binaryString(): String {
+    return toCharArray().joinToString("") { it.digitToInt(16).toString(2).padStart(4, '0') }
+}
+
+fun String.decodeHex(): ByteArray {
+    check(length % 2 == 0) { "Must have an even length" }
+
+    val byteIterator = chunkedSequence(2)
+        .map { it.toInt(16).toByte() }
+        .iterator()
+
+    return ByteArray(length / 2) { byteIterator.next() }
+}
+
 inline fun <T, R : Comparable<R>> Iterable<T>.minMax(selector: (T) -> R): Pair<R,R> {
     val iterator = iterator()
     if (!iterator.hasNext()) throw NoSuchElementException()
