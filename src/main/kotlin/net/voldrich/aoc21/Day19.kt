@@ -45,6 +45,26 @@ class Day19 : BaseDay() {
             transformationList = trList
         }
 
+        fun findTotalPoints() : Int {
+            val resultPointSet = HashSet<ScannerPoint>()
+            val targetScanner = scanners[0]
+            resultPointSet.addAll(scanners[0].points)
+            for (i in (1 until scanners.size)) {
+                val from = scanners[i]
+                val transformations = findTransitiveTransformationChain(from, targetScanner)
+
+                println("scanner $i")
+                val transformedTo0 = transformations.fold(from) { scanner, tr ->
+                    println("${tr.from.index} ${tr.to.index}")
+                    scanner.applyTransformation(tr.scfnWithShift)
+                }
+
+                resultPointSet.addAll(transformedTo0.points)
+            }
+
+            return resultPointSet.size
+        }
+
         fun findMaxManhattanDistance() : Int {
             val scannerCenterPoints = ArrayList<ScannerPoint>()
             val targetScanner = scanners[0]
@@ -72,37 +92,17 @@ class Day19 : BaseDay() {
             return max
         }
 
-        fun findTotalPoints() : Int {
-            val resultPointSet = HashSet<ScannerPoint>()
-            val targetScanner = scanners[0]
-            resultPointSet.addAll(scanners[0].points)
-            for (i in (1 until scanners.size)) {
-                val from = scanners[i]
-                val transformations = findTransitiveTransformationChain(from, targetScanner)
-
-                println("scanner $i")
-                val transformedTo0 = transformations.fold(from) { scanner, tr ->
-                    println("${tr.from.index} ${tr.to.index}")
-                    scanner.applyTransformation(tr.scfnWithShift)
-                }
-
-                resultPointSet.addAll(transformedTo0.points)
-            }
-
-            return resultPointSet.size
-        }
-
         fun findTransitiveTransformationChain(from : Scanner, to : Scanner) : List<ScannerTransformation> {
-            return findTransitiveTransformationChain(from, to, transformationList, emptySet())
+            return findTransitiveTransformationChain(from, to, emptySet())
                 ?: throw Exception("Transformation chain not found to ${to.index}")
         }
 
-        fun findTransitiveTransformationChain(from : Scanner, to : Scanner, trList : List<ScannerTransformation>, visited : Set<Scanner>) : List<ScannerTransformation>? {
-            trList.filter { it.from === from && !visited.contains(it.to) }.forEach { tr ->
+        fun findTransitiveTransformationChain(from : Scanner, to : Scanner, visited : Set<Scanner>) : List<ScannerTransformation>? {
+            transformationList.filter { it.from === from && !visited.contains(it.to) }.forEach { tr ->
                 if (tr.to === to) {
                     return listOf(tr)
                 } else {
-                    val transitive = findTransitiveTransformationChain(tr.to, to, trList, visited + setOf(from))
+                    val transitive = findTransitiveTransformationChain(tr.to, to, visited + setOf(from))
                     if (transitive != null) {
                         return listOf(tr) + transitive
                     }
@@ -112,11 +112,11 @@ class Day19 : BaseDay() {
         }
 
         fun findTransformation(from : Scanner, to: Scanner) : ScannerTransformation? {
-            trOptions.forEach { scfn ->
+            allTransformationOptions.forEach { scfn ->
                 val s2Tr = from.applyTransformation(scfn)
                 val deltaList = to.points.flatMap { s1point ->
                     s2Tr.points.map { s2point ->
-                        s1point.delta(s2point, scfn)
+                        s1point.delta(s2point)
                     }
                 }.toList()
 
@@ -130,7 +130,7 @@ class Day19 : BaseDay() {
                 // if transformation is correct, 12 points should match
                 val match = deltaMap.values.filter { it.size >= 12 }.toList()
                 if (match.size == 1) {
-                    return ScannerTransformation(from, to, match[0])
+                    return ScannerTransformation(from, to, match[0], scfn)
                 }
             }
             return null
@@ -180,10 +180,13 @@ class Day19 : BaseDay() {
         { point -> ScannerPoint(-point.x, -point.y, -point.z) },
     )
 
-    val trOptions : List<ScFn>
+    val allTransformationOptions : List<ScFn>
 
     init {
-        trOptions = trAxis.flatMap { axisFn -> trOrientation.map { orientFn -> {point : ScannerPoint -> axisFn.invoke(orientFn.invoke(point)) } } }.toList()
+        allTransformationOptions = trAxis.flatMap { axisFn ->
+            trOrientation.map { orientFn ->
+                { point : ScannerPoint -> axisFn.invoke(orientFn.invoke(point)) } } }
+            .toList()
     }
 
     class Scanner(val name: String, val index : Int, val points: List<ScannerPoint>) {
@@ -202,8 +205,8 @@ class Day19 : BaseDay() {
             return "$x,$y,$z"
         }
 
-        fun delta(other: ScannerPoint, scfn: ScFn) : Delta {
-            return Delta(ScannerPoint(this.x - other.x, this.y - other.y, this.z - other.z), this, other, scfn)
+        fun delta(other: ScannerPoint) : Delta {
+            return Delta(ScannerPoint(this.x - other.x, this.y - other.y, this.z - other.z), this, other)
         }
 
         fun distanceTo(other: ScannerPoint): Int {
@@ -211,11 +214,10 @@ class Day19 : BaseDay() {
         }
     }
 
-    data class Delta(val delta : ScannerPoint, val p1 : ScannerPoint, val p2 : ScannerPoint, val scfn: ScFn)
+    data class Delta(val delta : ScannerPoint, val p1 : ScannerPoint, val p2 : ScannerPoint)
 
-    data class ScannerTransformation(val from: Scanner, val to: Scanner, val points : List<Delta>) {
+    data class ScannerTransformation(val from: Scanner, val to: Scanner, val points : List<Delta>, val scfn: ScFn) {
         val delta = points[0].delta
-        val scfn = points[0].scfn
 
         val scfnWithShift = { point : ScannerPoint ->
             val fn = scfn.invoke(point)
