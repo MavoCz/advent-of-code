@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.7.20"
     application
 }
 
-group = "me.matousv"
+group = "net.voldrich.adventofcode"
 version = "1.0-SNAPSHOT"
 
 repositories {
