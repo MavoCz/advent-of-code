@@ -2,7 +2,7 @@ package net.voldrich.aoc2022
 
 import net.voldrich.BaseDay
 
-// https://adventofcode.com/2022/day/1
+// https://adventofcode.com/2022/day/2
 fun main() {
     Day2().run()
 }
