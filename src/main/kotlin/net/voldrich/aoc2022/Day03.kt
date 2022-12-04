@@ -45,12 +45,13 @@ class Day3 : BaseDay() {
         }
     }
 
-
+    // proposed by copilot
     fun splitStringIntoHalf(string: String): Pair<String, String> {
         val half = string.length / 2
         return Pair(string.substring(0, half), string.substring(half))
     }
 
+    // proposed by copilot
     fun stringToCharacterMap(string: String): Map<Char, Int> {
         return string.groupingBy { it }.eachCount()
     }
