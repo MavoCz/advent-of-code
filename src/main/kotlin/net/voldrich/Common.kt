@@ -3,6 +3,10 @@ package net.voldrich
 interface InputLoader {
     fun lines() : List<String>
 
+    fun getEmptyLineIndex() : Int {
+        return lines().indexOfFirst { it.isBlank() }
+    }
+
     fun getFirstLineAsIntList(): List<Int> {
         return lines()[0].split(",").map { it.toInt() }.toList()
     }
@@ -11,7 +15,7 @@ interface InputLoader {
 class TestInput(private val parsedLines: List<String>) : InputLoader {
 
     constructor(line: String, isMultiline: Boolean = false)
-            : this(if (isMultiline) line.trim().split("\n").map { it.trim() } else listOf(line.trim()))
+            : this(if (isMultiline) line.trimIndent().split("\n") else listOf(line))
 
     override fun lines(): List<String> = parsedLines
 }
@@ -35,7 +39,7 @@ class ResourceInput(private val resourcePath: String) : InputLoader {
     private fun getResourceAsLines(path: String): List<String> {
         return getResourceAsText(path)
             .split("\n")
-            .map { it.trim() } // needed for windows removal of \r
+            //.map { it.trim() } // needed for windows removal of \r
     }
 }
 
