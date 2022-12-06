@@ -6,11 +6,11 @@ import kotlin.collections.ArrayList
 
 // https://adventofcode.com/2022/day/5
 fun main() {
-    Day5().run()
+    Day05().run()
 }
 
 
-class Day5 : BaseDay() {
+class Day05 : BaseDay() {
 
     val instructionRegex = Regex("move ([0-9]+) from ([0-9]+) to ([0-9]+)")
 
@@ -45,7 +45,6 @@ class Day5 : BaseDay() {
         }
         for (i in 0 until separator - 1) {
             val line = input.lines()[i]
-            println(line.length)
             for (q in indexes.indices) {
                 val j = indexes[q]
                 if (j < line.length && line[j] != ' ') {

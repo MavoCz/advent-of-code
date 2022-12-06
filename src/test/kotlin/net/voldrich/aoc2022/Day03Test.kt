@@ -1,16 +1,15 @@
 package net.voldrich.aoc2022
 
 import net.voldrich.TestInput
-import net.voldrich.aoc2021.Day8
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 
-class Day3Test {
+class Day03Test {
 
     @Test
     fun testCharToPriority() {
-        val day = Day3()
+        val day = Day03()
         println('A'.code)
         println('a'.code)
         println('a'.code - 96)
@@ -25,7 +24,7 @@ class Day3Test {
 
     @Test
     fun testExample() {
-        val day = Day3()
+        val day = Day03()
         day.input = TestInput("""
         vJrwpWtwJgWrhcsFMMfFFhFp
         jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL

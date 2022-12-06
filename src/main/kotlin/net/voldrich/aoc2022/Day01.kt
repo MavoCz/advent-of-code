@@ -4,11 +4,11 @@ import net.voldrich.BaseDay
 
 // https://adventofcode.com/2022/day/1
 fun main() {
-    Day1().run()
+    Day01().run()
 }
 
 // Written mostly by copilot
-class Day1 : BaseDay() {
+class Day01 : BaseDay() {
 
     override fun task1() : Int {
         val groups = groupLinesSeparatedByEmptyLine(input.lines())

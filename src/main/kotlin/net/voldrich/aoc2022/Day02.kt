@@ -4,11 +4,11 @@ import net.voldrich.BaseDay
 
 // https://adventofcode.com/2022/day/2
 fun main() {
-    Day2().run()
+    Day02().run()
 }
 
 // Written mostly by copilot
-class Day2 : BaseDay() {
+class Day02 : BaseDay() {
 
     enum class Type {
         ROCK, PAPER, SCISSORS

@@ -4,11 +4,11 @@ import net.voldrich.BaseDay
 
 // https://adventofcode.com/2022/day/3
 fun main() {
-    Day3().run()
+    Day03().run()
 }
 
 // Written mostly by copilot
-class Day3 : BaseDay() {
+class Day03 : BaseDay() {
 
     override fun task1() : Int {
         return input.lines().map { line ->

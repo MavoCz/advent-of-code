@@ -4,11 +4,11 @@ import net.voldrich.TestInput
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class Day4Test {
+class Day04Test {
 
     @Test
     fun testExample() {
-        val day = Day4()
+        val day = Day04()
         day.input = TestInput("""
         2-4,6-8
         2-3,4-5
