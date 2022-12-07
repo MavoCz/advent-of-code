@@ -30,13 +30,13 @@ class Day05 : BaseDay() {
     }
 
     private fun parseQueues(separator: Int): ArrayList<LinkedList<Char>> {
-        val indexes = input.lines()[separator - 1].mapIndexed { index, c ->
+        val indexes = input.lines()[separator - 1].mapIndexedNotNull { index, c ->
             if (c != ' ') {
                 index
             } else {
-                -1
+                null
             }
-        }.filter { it != -1 }
+        }
 
         val queues = ArrayList<LinkedList<Char>>(indexes.size)
 

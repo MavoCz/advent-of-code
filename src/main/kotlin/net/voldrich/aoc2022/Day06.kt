@@ -10,16 +10,16 @@ fun main() {
 class Day06 : BaseDay() {
 
     override fun task1() : Int {
-        val uniques = findUnique4CharactersNextToEachOther(input.lines().first(), 4)
+        val uniques = findNUniqueCharactersNextToEachOther(input.lines().first(), 4)
         return uniques.first().second
     }
 
     override fun task2() : Int {
-        val uniques = findUnique4CharactersNextToEachOther(input.lines().first(), 14)
+        val uniques = findNUniqueCharactersNextToEachOther(input.lines().first(), 14)
         return uniques.first().second
     }
 
-    fun findUnique4CharactersNextToEachOther(input: String, windowSize: Int): List<Pair<String, Int>> {
+    fun findNUniqueCharactersNextToEachOther(input: String, windowSize: Int): List<Pair<String, Int>> {
         return input
             .windowed(windowSize, 1)
             .mapIndexedNotNull { index, s ->
@@ -30,8 +30,5 @@ class Day06 : BaseDay() {
                 }
             }
     }
-
-
-
 }
 
