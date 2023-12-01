@@ -11,9 +11,9 @@ class Day01Test {
         val day = Day01()
         day.input = TestInput("""
         1abc2
-pqr3stu8vwx
-a1b2c3d4e5f
-treb7uchet
+        pqr3stu8vwx
+        a1b2c3d4e5f
+        treb7uchet
         """, true)
         assertEquals(142, day.task1())
     }
@@ -23,14 +23,20 @@ treb7uchet
         val day = Day01()
         day.input = TestInput("""
         two1nine
-eightwothree
-abcone2threexyz
-xtwone3four
-4nineeightseven2
-zoneight234
-7pqrstsixteen
+        eightwothree
+        abcone2threexyz
+        xtwone3four
+        4nineeightseven2
+        zoneight234
+        7pqrstsixteen
         """, true)
         assertEquals(281, day.task2())
-        //assertEquals(0, day.task2())
+    }
+
+    @Test
+    fun testReal() {
+        val day = Day01()
+        assertEquals(54450, day.task1())
+        assertEquals(54265, day.task2())
     }
 }
