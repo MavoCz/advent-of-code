@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.20"
+    kotlin("jvm") version "1.9.0"
     application
 }
 
@@ -15,7 +15,7 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("com.github.kittinunf.fuel:fuel:2.3.1")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.6.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
     implementation("org.jheaps:jheaps:0.14")
 }
 
@@ -24,7 +24,7 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "11"
+    kotlinOptions.jvmTarget = "17"
 }
 
 application {
