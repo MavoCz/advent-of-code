@@ -7,7 +7,6 @@ fun main() {
     Day01().run()
 }
 
-// Written mostly by copilot
 class Day01 : BaseDay() {
 
     override fun task1() : Int {

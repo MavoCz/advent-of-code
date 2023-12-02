@@ -1,6 +1,6 @@
 package net.voldrich
 
-// https://adventofcode.com/2022/day/0
+// https://adventofcode.com/2023/day/0
 fun main() {
     Day00().run()
 }
