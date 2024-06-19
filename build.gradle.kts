@@ -15,7 +15,7 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("com.github.kittinunf.fuel:fuel:2.3.1")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
     implementation("org.jheaps:jheaps:0.14")
 }
 

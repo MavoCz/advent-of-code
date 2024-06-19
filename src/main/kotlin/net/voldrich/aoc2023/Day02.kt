@@ -22,6 +22,14 @@ class Day02 : BaseDay() {
             .sumOf { it.number }
     }
 
+    override fun task2(): Int {
+        return input.lines()
+            .filter { it.isNotBlank() }
+            .map { parseGame(it) }
+            .map { findMaxPerColorPower(it) }
+            .sumOf { it }
+    }
+
     private fun hasAtLeast(game: Game, marbleCounts: Map<String, Int>): Boolean {
         for ((color, count) in game.colors) {
             if (marbleCounts.getOrDefault(color, 0) < count) {
@@ -29,14 +37,6 @@ class Day02 : BaseDay() {
             }
         }
         return true
-    }
-
-    override fun task2(): Int {
-        return input.lines()
-            .filter { it.isNotBlank() }
-            .map { parseGame(it) }
-            .map { findMaxPerColorPower(it) }
-            .sumOf { it }
     }
 
     private fun findMaxPerColorPower(game: Game): Int {
@@ -53,7 +53,7 @@ class Day02 : BaseDay() {
 
     data class Game(val number: Int, val colors: List<Pair<String, Int>>)
 
-    fun parseGame(line: String): Game {
+    private fun parseGame(line: String): Game {
         val parts = line.split(": ", ", ", "; ")
         val colors = mutableListOf<Pair<String, Int>>()
         var gameNumber = 0
